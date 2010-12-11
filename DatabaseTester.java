@@ -9,13 +9,16 @@ public class DatabaseTester{
     Scanner keyboard = new Scanner(System.in);
     System.out.println("DatabaseTester - Let's encrypt and store some words");
     
+    System.out.print("Enter the site name: ");
+    String siteName = keyboard.nextLine();
+    
     System.out.print("Enter your username: ");
     String username = keyboard.nextLine();
     
     System.out.print("Enter your password: ");
     String password = keyboard.nextLine();
     
-    System.out.println("Your username: " + username + "\nYour password: " + password);
+    System.out.println("Site Name: " + siteName + "Your username: " + username + "\nYour password: " + password);
     
     // the Password class automatically encrypts the password when you instantiate it
     // the constructor takes a string
@@ -36,7 +39,7 @@ public class DatabaseTester{
     Database.createDatabase();
     
     // to add a username and password to the database, just use this method
-    Database.addUsernameAndPasswordToDatabase(username, passwd.toString());
+    Database.addUsernameAndPasswordToDatabase(siteName, username, passwd.toString());
     
     // this method will return all the rows of the database in a 2-dimensional array
     String passwords[][] = Database.getAllUsernameAndPasswordPairs();
@@ -45,9 +48,31 @@ public class DatabaseTester{
     System.out.println("Here's all the pairs in the database!!");
     for(int i=0; i<passwords.length; i++){
       for(int j=0; j<passwords[i].length; j++){
-        System.out.print(passwords[i][j] + " ");
+        System.out.print(passwords[i][j] + "\t");
       }
       System.out.print("\n");
+    }
+    
+    // Master Password stuff
+    System.out.println("Master Password exists in db? " + Database.hasMasterPassword());
+    
+    System.out.print("Enter new Master Password: ");
+    String masterPassword = keyboard.nextLine();
+    
+    Password masterP = new Password(masterPassword);
+    
+    Database.setMasterPasswordInDB(masterP.toString());
+        
+    String masterPasswordFromDB = Database.getMasterPassword();
+    System.out.println("Master Password from DB: " + masterPasswordFromDB);
+    
+    System.out.print("Enter Master Password: ");
+    String possibleMasterPassword = keyboard.next();
+    
+    if(Password.isCorrectPassword(masterPasswordFromDB, possibleMasterPassword)){
+      System.out.println("That password is correct");
+    } else {
+      System.out.println("That password is incorrect");
     }
     
   }

@@ -27,6 +27,11 @@ public class Password{
     return (String) this.getEncryptedPassword();
   }
   
+  public static boolean isCorrectPassword(String encryptedPassword, String toValidate){
+    String decryptedPassword = Password.decryptPassword(encryptedPassword);
+    return toValidate.equals(decryptedPassword);
+  }
+  
   public static String decryptPassword(String encryptedPassword){
     BasicTextEncryptor encryptor2 = new BasicTextEncryptor();
     encryptor2.setPassword(ENCRYPTOR_PASSWORD);
